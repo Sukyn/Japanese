@@ -64,12 +64,12 @@ def rewrite(word):
     # ---- #
     decalage = 1
     for i in range(len(word)-1):
-        print(i,word[i+decalage-1], decalage, word, len(word))
-        if word[i+decalage-1] in consonant and word[i+decalage] in consonant:
-            word = word[:i+decalage] + 'u' + word[i+decalage:]
+        true_i = i+decalage
+        if word[true_i-1] in consonant and word[true_i] in consonant: #We insert an 'u' if there are two consonants followed
+            word = word[:true_i] + 'u' + word[true_i:]
             decalage += 1
-        if word[i+decalage-1] in consonant and word[i+decalage] == " ":
-            word = word[:i+decalage] + 'u' + word[i+decalage:]
+        if word[true_i-1] in consonant and (word[true_i] == " " or word[true_i] == "," or word[true_i] == "." or word[true_i] == "'"): #We insert an 'u' if it is at the end of a word
+            word = word[:true_i] + 'u' + word[true_i:]
             decalage += 1
     if word[-1] in consonant:
         word = word + "u"
@@ -79,22 +79,23 @@ def transformToKatakana(sentence):
     """Transforms a sentence into katakana"""
     roumaji = rewrite(sentence)
     desc = ""
-    decalage = 2
     vowel = ["a", "e", "i", "u", "o"]
-    for i in range (0, len(roumaji)-1, decalage):
-        decalage = 2
+    decalage = 0
+    for i in range (len(roumaji)-1):
+        true_i = i+decalage
         temp = " "
-        if roumaji[i] in vowel:
-            print(roumaji[i], roumaji)
-            temp = convertSyllabus(roumaji[i])
-            decalage = 1
-        elif roumaji[i] == " ":
-            decalage = 1
-        else:
-            print(roumaji[i], roumaji)
-            temp = convertSyllabus(roumaji[i] + roumaji[i+1])
+
+        if true_i >= (len(roumaji) - 1):
+            break
+        if roumaji[true_i] in vowel:
+            temp = convertSyllabus(roumaji[true_i])
+        elif (roumaji[true_i] == " " or roumaji[true_i] == "," or roumaji[true_i] == "." or roumaji[true_i] == "'"):
+            pass
+        else: #If not a vowel nor a space, it means that it is a two char syllabus
+            temp = convertSyllabus(roumaji[true_i] + roumaji[true_i+1])
+            decalage += 1
         desc += temp
-        print(desc)
+
     return desc
 
 if __name__ == '__main__':
