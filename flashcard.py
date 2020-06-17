@@ -3,7 +3,7 @@ import json
 import os
 from random import randint
 
-MAX_LEVEL = 10
+MAX_LEVEL = 10 #This means that a new card has 10x more chances to be picked up than a mastered card
 
 class Card:
     """represents a card"""
@@ -20,7 +20,7 @@ class Flashcard():
     #CARDS is used at initialization to collect data from json
     CARDS = []
 
-    def __init__(self, activation=True, progress=1, **kwargs):
+    def __init__(self, activation=True, progress=0, **kwargs):
         #If not activated it shouldn't be pickable
         self._activated = activation
         #The higher skill you have, the lower chance of picking this card you get
@@ -39,7 +39,7 @@ class Flashcard():
 
     def wrong(self):
         """called when someone gives a wront answer"""
-        self._skill = 1
+        self._skill = 0
         print_card()
 
     def change_activation(self):
